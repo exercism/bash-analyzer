@@ -1,0 +1,5 @@
+analysis.json
+
+# vim
+.*.sw?
+.sw?
