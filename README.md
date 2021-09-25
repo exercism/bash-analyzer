@@ -2,17 +2,12 @@
 
 This is Exercism's automated analyzer for the Bash track.
 
-It is run with `./bin/run.sh $EXERCISM $PATH_TO_FILES $PATH_FOR_OUTPUT` and will read the source code from `$PATH_TO_FILES` and write a text file with an analysis to `$PATH_FOR_OUTPUT`.
+It is run with `bin/run.sh $exercise $path_to_files $path_for_output` and
+will read the source code from `$path_to_files` and write a text file with
+an analysis to `$path_for_output`.
 
-For example:
-
-```bash
-./bin/run.sh two_fer ~/solution-238382y7sds7fsadfasj23j/ ~/solution-238382y7sds7fsadfasj23j/output/
-```
-<!--
-Unit tests can be run from this directory:
+For example (note the kebab-case of the exercise slug):
 
 ```bash
-pylint -x
+bin/run.sh two-fer /opt/exercises/two-fer /opt/analysis_output
 ```
--->
