@@ -5,25 +5,34 @@
       "comment": "bash.shellcheck.generic",
       "type": "informative",
       "params": {
-        "message": "Expected '=' after directive key. Fix any mentioned problems and try again.",
+        "message": "Expected a '}'. If you have one, try a ; or \\n in front of it.",
+        "code": 1056,
+        "lines": "line 7"
+      }
+    },
+    {
+      "comment": "bash.shellcheck.generic",
+      "type": "informative",
+      "params": {
+        "message": "Missing '}'. Fix any mentioned problems and try again.",
         "code": 1072,
-        "lines": "line 6"
+        "lines": "line 7"
       }
     },
     {
       "comment": "bash.shellcheck.generic",
       "type": "informative",
       "params": {
-        "message": "Couldn't parse this shellcheck directive. Fix to allow more checks.",
+        "message": "Couldn't parse this brace group. Fix to allow more checks.",
         "code": 1073,
-        "lines": "line 6"
+        "lines": "line 3"
       }
     },
     {
       "comment": "bash.shellcheck.generic",
       "type": "informative",
       "params": {
-        "message": "The mentioned syntax error was in this brace group.",
+        "message": "The mentioned syntax error was in this function.",
         "code": 1009,
         "lines": "line 3"
       }
