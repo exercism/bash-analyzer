@@ -38,11 +38,10 @@ data["comments"].each do |sc_cmt|
     if not findings[level].has_key? code
       findings[level][code] = {
         message: sc_cmt["message"],
-        lines: [sc_cmt["line"]]
+        lines: []
       }
-    else
-      findings[level][code][:lines] << sc_cmt["line"]
     end
+    findings[level][code][:lines] << sc_cmt["line"]
   end
 end
 
@@ -60,12 +59,12 @@ comments = []
       end
 
     comment = {
-      "comment" => "bash.shellcheck.generic",
-      "type" => "informative", 
-      "params" => {
-        "message" => msg,
-        "code" => code,
-        "lines" => lines_text,
+      comment: "bash.shellcheck.generic",
+      type: "informative", 
+      params: {
+        message: msg,
+        code: code,
+        lines: lines_text,
       }
     }
     comments << comment
@@ -83,6 +82,7 @@ summary =
     "Shellcheck suggestions"
   end
 
-analysis = {"summary": summary, "comments": comments}
-
-puts JSON.pretty_generate(analysis)
+puts JSON.pretty_generate({
+  summary: summary,
+  comments: comments
+})

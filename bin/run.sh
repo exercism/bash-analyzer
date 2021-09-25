@@ -49,6 +49,7 @@ main() {
     validate
 
     analyze \
+    | tee "$outDir/analysis.out" \
     | process \
     | tee "$outDir/analysis.json"
 }

@@ -1,0 +1,41 @@
+{
+  "summary": "Shellcheck errors encountered",
+  "comments": [
+    {
+      "comment": "bash.shellcheck.generic",
+      "type": "informative",
+      "params": {
+        "message": "Couldn't find 'fi' for this 'if'.",
+        "code": 1046,
+        "lines": "line 3"
+      }
+    },
+    {
+      "comment": "bash.shellcheck.generic",
+      "type": "informative",
+      "params": {
+        "message": "Expected 'fi' matching previously mentioned 'if'.",
+        "code": 1047,
+        "lines": "line 6"
+      }
+    },
+    {
+      "comment": "bash.shellcheck.generic",
+      "type": "informative",
+      "params": {
+        "message": "Expected 'fi'. Fix any mentioned problems and try again.",
+        "code": 1072,
+        "lines": "line 6"
+      }
+    },
+    {
+      "comment": "bash.shellcheck.generic",
+      "type": "informative",
+      "params": {
+        "message": "Couldn't parse this if expression. Fix to allow more checks.",
+        "code": 1073,
+        "lines": "line 3"
+      }
+    }
+  ]
+}

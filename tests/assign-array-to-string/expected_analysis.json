@@ -1,0 +1,14 @@
+{
+  "summary": "Shellcheck warnings encountered",
+  "comments": [
+    {
+      "comment": "bash.shellcheck.generic",
+      "type": "informative",
+      "params": {
+        "message": "Assigning an array to a string! Assign as array, or use * instead of @ to concatenate.",
+        "code": 2124,
+        "lines": "line 4"
+      }
+    }
+  ]
+}

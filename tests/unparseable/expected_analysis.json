@@ -1,0 +1,32 @@
+{
+  "summary": "Shellcheck errors encountered",
+  "comments": [
+    {
+      "comment": "bash.shellcheck.generic",
+      "type": "informative",
+      "params": {
+        "message": "Expected '=' after directive key. Fix any mentioned problems and try again.",
+        "code": 1072,
+        "lines": "line 6"
+      }
+    },
+    {
+      "comment": "bash.shellcheck.generic",
+      "type": "informative",
+      "params": {
+        "message": "Couldn't parse this shellcheck directive. Fix to allow more checks.",
+        "code": 1073,
+        "lines": "line 6"
+      }
+    },
+    {
+      "comment": "bash.shellcheck.generic",
+      "type": "informative",
+      "params": {
+        "message": "The mentioned syntax error was in this brace group.",
+        "code": 1009,
+        "lines": "line 3"
+      }
+    }
+  ]
+}

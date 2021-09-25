@@ -1,0 +1,14 @@
+{
+  "summary": "Shellcheck suggestions",
+  "comments": [
+    {
+      "comment": "bash.shellcheck.generic",
+      "type": "informative",
+      "params": {
+        "message": "read without -r will mangle backslashes.",
+        "code": 2162,
+        "lines": "lines 2, 3, 4, 5"
+      }
+    }
+  ]
+}
