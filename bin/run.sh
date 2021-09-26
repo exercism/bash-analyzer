@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 
-die() { echo "$*" >&2; exit 1; }
-
 usage() {
-    local usage="Usage: ${0##*/} slug inputDir outputDir"
-    (($#)) && printf -v usage '%s\n%s' "$*" "$usage"
-    die "$usage"
+    printf '%s\n' "$*"
+    printf '%s\n' "Usage: ${0##*/} slug inputDir outputDir"
+    exit 1
 }
 
 analyze() {
@@ -17,7 +15,7 @@ analyze() {
         "--format=json1"
     )
     (
-        cd "$inDir" >/dev/null
+        cd "$inDir" >/dev/null || exit 1
         shellcheck "${opts[@]}" "${filename}.sh"
     )
 }
@@ -29,14 +27,14 @@ process() {
 
 validate() {
     if ! [[ -d "$inDir" && -r "$inDir" ]]; then
-        usage "Error: not a dir or not readable: '$inDir'"
+        usage "Error: not a dir or not readable: ${inDir@Q}"
     fi
     if ! [[ -d "$outDir" && -w "$outDir" ]]; then
-        usage "Error: not a dir or not writable: '$outDir'"
+        usage "Error: not a dir or not writable: ${outDir@Q}"
     fi
     local source="$inDir/${filename}.sh"
     if ! [[ -f $source && -r $source ]]; then
-        usage "Error: not a file or not readable: '$source'"
+        usage "Error: not a file or not readable: ${source@Q}"
     fi
 }
 

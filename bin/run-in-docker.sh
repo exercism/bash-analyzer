@@ -20,8 +20,8 @@ set -e
 # ./run-in-docker.sh two-fer ./relative/path/to/two-fer/solution/folder/ ./relative/path/to/output/directory/
 
 # If arguments not provided, print usage and exit
-if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
-    echo "usage: run-in-docker.sh exercise-slug ./relative/path/to/solution/folder/ ./relative/path/to/output/directory/"
+if [[ -z "$1" || -z "$2" || -z "$3" ]]; then
+    echo "usage: run-in-docker.sh exercise-slug /path/to/solution/folder/ /path/to/output/directory/"
     exit 1
 fi
 

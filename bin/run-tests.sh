@@ -1,4 +1,5 @@
-#! /bin/bash -e
+#!/usr/bin/env bash
+set -e
 
 # Synopsis:
 # Test the test runner by running it against a predefined set of solutions 
@@ -32,6 +33,7 @@ END_TEMPLATE
     echo '#!/usr/bin/env bats'
     for dir in tests/*/; do
         slug=$(basename "$dir")
+        # shellcheck disable=SC2059
         printf "$test_template"'\n' "$slug" "$slug"
     done 
 } > tests/all_tests.bats
