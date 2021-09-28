@@ -1,0 +1,7 @@
+analysis.json
+analysis.out
+all_tests.bats
+
+# vim
+.*.sw?
+.sw?
