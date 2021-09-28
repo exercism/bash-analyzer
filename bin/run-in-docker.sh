@@ -21,21 +21,25 @@ set -e
 
 # If arguments not provided, print usage and exit
 if [[ -z "$1" || -z "$2" || -z "$3" ]]; then
-    echo "usage: run-in-docker.sh exercise-slug /path/to/solution/folder/ /path/to/output/directory/"
+    echo "usage: run-in-docker.sh exercise-slug ./relative/path/to/solution/folder/ ./relative/path/to/output/directory/"
     exit 1
 fi
+
+slug="$1"
+input_dir="${2%/}"
+output_dir="${3%/}"
+
+# Create output directory if it doesn't exist
+mkdir -p "${output_dir}"
 
 # build docker image
 docker build --rm --no-cache -t bash-analyzer .
 
-# Create output directory if it doesn't exist
-output_dir="$3"
-mkdir -p "$output_dir"
-
 # run image passing the arguments
 docker run \
-    --mount "type=bind,src=$PWD/$2,dst=/solution" \
-    --mount "type=bind,src=$PWD/$output_dir,dst=/output" \
-    bash-analyzer "$1" /solution/ /output/
-    
-
+    --network none \
+    --read-only \
+    --mount type=bind,src="${PWD}/${input_dir}",dst=/solution \
+    --mount type=bind,src="${PWD}/${output_dir}",dst=/output \
+    --mount type=tmpfs,dst=/tmp \
+    exercism/bash-analyzer "${slug}" /solution/ /output/
