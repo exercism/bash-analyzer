@@ -1,6 +1,9 @@
-analysis.json
-analysis.out
 all_tests.bats
+
+analysis.json
+general_analysis.json
+shellcheck_analysis.json
+shellcheck_analysis.out
 
 # vim
 .*.sw?
