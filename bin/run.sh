@@ -8,7 +8,7 @@ usage() {
     exit 1
 }
 
-validate() {
+validate_input() {
     if ! [[ -d "$in_dir" && -r "$in_dir" ]]; then
         usage "Error: not a dir or not readable: ${in_dir@Q}"
     fi
@@ -32,21 +32,21 @@ merge_json() {
     local files=("$out_dir"/!(expected)_analysis.json)
     local summary
 
+    # use the shellcheck summary if it exists
     if array_includes files "$out_dir/shellcheck_analysis.json"; then
         summary=$(jq -r .summary "$out_dir/shellcheck_analysis.json")
     fi
 
-    case "$summary" in
-        "" | *"No Shellcheck suggestions"* )
-            if (( ${#files[@]} < 2 )); then
-                summary="Congrats! No suggestions"
-            else
-                summary="Some comments"
-            fi
-            ;;
-        *) : ;;
-    esac
+    # otherwise, perhaps choose a different one
+    if [[ -z $summary || $summary == *"No Shellcheck suggestions"* ]]; then
+        if (( ${#files[@]} < 2 )); then
+            summary="Congrats! No suggestions"
+        else
+            summary="Some comments"
+        fi
+    fi
 
+    # and merge the json files into "analysis.json"
     # thanks to https://stackoverflow.com/a/36218044/7552
     jq --arg sum "$summary" --slurp '{
         summary: $sum,
@@ -60,20 +60,25 @@ main() {
     local out_dir=${3:-.}
     local snake_slug=${slug//-/_}
 
-    validate
+    validate_input
 
-    # the analysis.bash is expected to have a namespaced
-    # `analyze` function.
+    # the analysis.bash is expected to have a namespaced `analyze` function.
     # e.g.
     #   "lib/foo-bar/analysis.bash"
     # contains
     #   foo_bar::analyze() { ... }
+    #
+    # Each analyze function will emit a *_analysis.json file
+    # containing that module's list of comments to show the student:
+    #   {"comments": [...]}
 
     local namespace
     for module in general shellcheck "$slug"; do
-        namespace=${module//-/_}
-        if [[ -d "lib/$module" && -f "lib/$module/analysis.bash" ]]; then
-            source "lib/$module/analysis.bash" \
+        src_file="lib/$module/analysis.bash"
+        if [[ -f $src_file ]]; then
+            namespace=${module//-/_}
+
+            source "$src_file" \
             && "${namespace}::analyze" "$in_dir" "$out_dir" "$snake_slug"
         fi
     done
