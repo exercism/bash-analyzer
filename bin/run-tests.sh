@@ -2,7 +2,7 @@
 set -e
 
 # remove residue from previous runs
-find tests/*/ -name \*_analysis.json \( -not -name expected_analysis.json \) -delete
+find tests/ -name \*_analysis.json \( -not -name expected_analysis.json \) -delete
 
 # Synopsis:
 # Test the test runner by running it against a predefined set of solutions 

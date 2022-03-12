@@ -23,9 +23,9 @@ validate_input() {
 
 array_includes() {
     local -n arr=$1
-    local elem=$2
-    local IFS=:
-    [[ ":${arr[*]}:" == *":$elem:"* ]]
+    local elem=$2 e
+    for e in "${arr[@]}"; do [[ "$e" == "$elem" ]] && return; done
+    return 1
 }
 
 merge_json() {
