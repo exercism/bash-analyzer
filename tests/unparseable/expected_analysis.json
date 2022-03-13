@@ -1,5 +1,4 @@
 {
-  "summary": "Shellcheck errors encountered",
   "comments": [
     {
       "comment": "bash.shellcheck.generic",
@@ -37,5 +36,6 @@
         "lines": "line 3"
       }
     }
-  ]
+  ],
+  "summary": "Shellcheck errors encountered"
 }

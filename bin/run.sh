@@ -30,28 +30,33 @@ array_includes() {
 
 merge_json() {
     local files=("$out_dir"/!(expected)_analysis.json)
-    local summary
+    local summary n_comments temp
 
-    # use the shellcheck summary if it exists
+    # Merge the comments in the json files into "analysis.json".
+    # Thanks to https://stackoverflow.com/a/36218044/7552
+    jq --slurp '{
+        comments: (reduce .[] as $item ([]; . + $item.comments))
+    }' "${files[@]}" > "$out_dir/analysis.json"
+
+    n_comments=$(jq '.comments | length' "$out_dir/analysis.json")
+
+    # Use the shellcheck summary if it exists
     if array_includes files "$out_dir/shellcheck_analysis.json"; then
         summary=$(jq -r .summary "$out_dir/shellcheck_analysis.json")
     fi
 
-    # otherwise, perhaps choose a different one
+    # Otherwise, perhaps choose a different one
     if [[ -z $summary || $summary == *"No Shellcheck suggestions"* ]]; then
-        if (( ${#files[@]} < 2 )); then
+        if ((n_comments == 0)); then
             summary="Congrats! No suggestions"
         else
             summary="Some comments"
         fi
     fi
 
-    # and merge the json files into "analysis.json"
-    # thanks to https://stackoverflow.com/a/36218044/7552
-    jq --arg sum "$summary" --slurp '{
-        summary: $sum,
-        comments: (reduce .[] as $item ([]; . + $item.comments))
-    }' "${files[@]}" > "$out_dir/analysis.json"
+    temp=$(mktemp)
+    jq --arg sum "$summary" '.summary = $sum' "$out_dir/analysis.json" > "$temp" \
+    && mv "$temp" "$out_dir/analysis.json"
 }
 
 main() {

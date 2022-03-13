@@ -1,5 +1,4 @@
 {
-  "summary": "Shellcheck suggestions",
   "comments": [
     {
       "comment": "bash.general.boilerplate_comment",
@@ -14,5 +13,6 @@
         "lines": "line 27"
       }
     }
-  ]
+  ],
+  "summary": "Shellcheck suggestions"
 }
