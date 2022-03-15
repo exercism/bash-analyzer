@@ -5,7 +5,7 @@ set -e
 find tests/ -name \*_analysis.json \( -not -name expected_analysis.json \) -delete
 
 # Synopsis:
-# Test the test runner by running it against a predefined set of solutions 
+# Test the test runner by running it against a predefined set of solutions
 # with an expected output.
 
 # Output:
@@ -38,7 +38,7 @@ END_TEMPLATE
         slug=$(basename "$dir")
         # shellcheck disable=SC2059
         printf "$test_template"'\n' "$slug" "$slug"
-    done 
+    done
 } > tests/all_tests.bats
 
 # now run it

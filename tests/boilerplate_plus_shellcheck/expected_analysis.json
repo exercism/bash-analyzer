@@ -1,9 +1,6 @@
 {
+  "summary": "Shellcheck suggestions",
   "comments": [
-    {
-      "comment": "bash.general.boilerplate_comment",
-      "type": "actionable"
-    },
     {
       "comment": "bash.shellcheck.generic",
       "type": "informative",
@@ -12,7 +9,10 @@
         "code": 2005,
         "lines": "line 27"
       }
+    },
+    {
+      "comment": "bash.general.boilerplate_comment",
+      "type": "actionable"
     }
-  ],
-  "summary": "Shellcheck suggestions"
+  ]
 }

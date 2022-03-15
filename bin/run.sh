@@ -8,6 +8,11 @@ usage() {
     exit 1
 }
 
+die() {
+    echo "$*" >&2
+    exit 1
+}
+
 validate_input() {
     if ! [[ -d "$in_dir" && -r "$in_dir" ]]; then
         usage "Error: not a dir or not readable: ${in_dir@Q}"
@@ -21,42 +26,12 @@ validate_input() {
     fi
 }
 
-array_includes() {
-    local -n arr=$1
-    local elem=$2 e
-    for e in "${arr[@]}"; do [[ "$e" == "$elem" ]] && return; done
-    return 1
-}
-
-merge_json() {
-    local files=("$out_dir"/!(expected)_analysis.json)
-    local summary n_comments temp
-
-    # Merge the comments in the json files into "analysis.json".
-    # Thanks to https://stackoverflow.com/a/36218044/7552
-    jq --slurp '{
-        comments: (reduce .[] as $item ([]; . + $item.comments))
-    }' "${files[@]}" > "$out_dir/analysis.json"
-
-    n_comments=$(jq '.comments | length' "$out_dir/analysis.json")
-
-    # Use the shellcheck summary if it exists
-    if array_includes files "$out_dir/shellcheck_analysis.json"; then
-        summary=$(jq -r .summary "$out_dir/shellcheck_analysis.json")
+invoke_analysis() {
+    local module=$1
+    if [[ -f "lib/$module/analysis.bash" ]]; then
+        bash "lib/$module/analysis.bash" "$in_dir" "$out_dir" "$snake_slug" \
+        || die "$module analysis exits non-zero."
     fi
-
-    # Otherwise, perhaps choose a different one
-    if [[ -z $summary || $summary == *"No Shellcheck suggestions"* ]]; then
-        if ((n_comments == 0)); then
-            summary="Congrats! No suggestions"
-        else
-            summary="Some comments"
-        fi
-    fi
-
-    temp=$(mktemp)
-    jq --arg sum "$summary" '.summary = $sum' "$out_dir/analysis.json" > "$temp" \
-    && mv "$temp" "$out_dir/analysis.json"
 }
 
 main() {
@@ -67,28 +42,17 @@ main() {
 
     validate_input
 
-    # the analysis.bash is expected to have a namespaced `analyze` function.
-    # e.g.
-    #   "lib/foo-bar/analysis.bash"
-    # contains
-    #   foo_bar::analyze() { ... }
+    # now run the checks. There will be (up to) 3 scripts executed:
     #
-    # Each analyze function will emit a *_analysis.json file
-    # containing that module's list of comments to show the student:
-    #   {"comments": [...]}
+    # 1. shellcheck -- run this first, to seed the analysis.json file
+    # 2. general, including checking for boiler-plate comments
+    # 3. exercise-specific
+    #
+    # Each script will merge its results into the "analysis.json" output file.
 
-    local namespace
-    for module in general shellcheck "$slug"; do
-        src_file="lib/$module/analysis.bash"
-        if [[ -f $src_file ]]; then
-            namespace=${module//-/_}
-
-            source "$src_file" \
-            && "${namespace}::analyze" "$in_dir" "$out_dir" "$snake_slug"
-        fi
-    done
-
-    merge_json
+    invoke_analysis shellcheck \
+    && invoke_analysis general \
+    && invoke_analysis "$slug"
 }
 
 main "$@"

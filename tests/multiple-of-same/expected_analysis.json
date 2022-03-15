@@ -1,4 +1,5 @@
 {
+  "summary": "Shellcheck suggestions",
   "comments": [
     {
       "comment": "bash.shellcheck.generic",
@@ -9,6 +10,5 @@
         "lines": "lines 2, 3, 4, 5"
       }
     }
-  ],
-  "summary": "Shellcheck suggestions"
+  ]
 }
