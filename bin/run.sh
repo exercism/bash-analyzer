@@ -50,9 +50,9 @@ main() {
     #
     # Each script will merge its results into the "analysis.json" output file.
 
-    invoke_analysis shellcheck \
-    && invoke_analysis general \
-    && invoke_analysis "$slug"
+    invoke_analysis shellcheck
+    invoke_analysis general
+    invoke_analysis "$slug"
 }
 
 main "$@"
