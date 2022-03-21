@@ -1,55 +1,58 @@
 #!/usr/bin/env bash
 
+shopt -s extglob
+
 usage() {
     printf '%s\n' "$*"
-    printf '%s\n' "Usage: ${0##*/} slug inputDir outputDir"
+    printf '%s\n' "Usage: ${0##*/} slug input_dir output_dir"
     exit 1
 }
 
-analyze() {
-    local opts=(
-        "--shell=bash"  
-        "--external-sources"
-        "--check-sourced"
-        "--norc"
-        "--format=json1"
-    )
-    (
-        cd "$inDir" >/dev/null || exit 1
-        shellcheck "${opts[@]}" "${filename}.sh"
-    )
+die() {
+    echo "$*" >&2
+    exit 1
 }
 
-process() {
-    # this reads stdin and emits to stdout
-    ruby bin/process-shellcheck-output.rb
-}
-
-validate() {
-    if ! [[ -d "$inDir" && -r "$inDir" ]]; then
-        usage "Error: not a dir or not readable: ${inDir@Q}"
+validate_input() {
+    if ! [[ -d "$in_dir" && -r "$in_dir" ]]; then
+        usage "Error: not a dir or not readable: ${in_dir@Q}"
     fi
-    if ! [[ -d "$outDir" && -w "$outDir" ]]; then
-        usage "Error: not a dir or not writable: ${outDir@Q}"
+    if ! [[ -d "$out_dir" && -w "$out_dir" ]]; then
+        usage "Error: not a dir or not writable: ${out_dir@Q}"
     fi
-    local source="$inDir/${filename}.sh"
+    local source="$in_dir/${snake_slug}.sh"
     if ! [[ -f $source && -r $source ]]; then
         usage "Error: not a file or not readable: ${source@Q}"
     fi
 }
 
+invoke_analysis() {
+    local module=$1
+    if [[ -f "lib/$module/analysis.bash" ]]; then
+        bash "lib/$module/analysis.bash" "$in_dir" "$out_dir" "$snake_slug" \
+        || die "$module analysis exits non-zero."
+    fi
+}
+
 main() {
     local slug=$1
-    local inDir=${2:-.}
-    local outDir=${3:-.}
-    local filename=${slug//-/_}
+    local in_dir=${2:-.}
+    local out_dir=${3:-.}
+    local snake_slug=${slug//-/_}
 
-    validate
+    validate_input
 
-    analyze \
-    | tee "$outDir/analysis.out" \
-    | process \
-    | tee "$outDir/analysis.json"
+    # now run the checks. There will be (up to) 3 scripts executed:
+    #
+    # 1. shellcheck -- run this first, to seed the analysis.json file
+    # 2. general, including checking for boiler-plate comments
+    # 3. exercise-specific
+    #
+    # Each script will merge its results into the "analysis.json" output file.
+
+    invoke_analysis shellcheck
+    invoke_analysis general
+    invoke_analysis "$slug"
 }
 
 main "$@"
