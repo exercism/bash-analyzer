@@ -1,0 +1,18 @@
+{
+  "summary": "Shellcheck suggestions",
+  "comments": [
+    {
+      "comment": "bash.shellcheck.generic",
+      "type": "informative",
+      "params": {
+        "message": "Useless echo? Instead of 'echo $(cmd)', just use 'cmd'.",
+        "code": 2005,
+        "lines": "line 27"
+      }
+    },
+    {
+      "comment": "bash.general.boilerplate_comment",
+      "type": "actionable"
+    }
+  ]
+}
