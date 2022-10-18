@@ -12,6 +12,7 @@ analyze() {
         "--check-sourced"
         "--norc"
         "--format=json1"
+        "--exclude=SC2190" # Temporarily disable: https://github.com/koalaman/shellcheck/issues/2393
     )
     (
         cd "$in_dir" > /dev/null || exit 1
