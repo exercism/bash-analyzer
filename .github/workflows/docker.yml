@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # 2.3.4
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@4fd812986e6c8c2a69e18311145f9371337f27d4 # 3.4.0
+        uses: docker/setup-buildx-action@aa33708b10e362ff993539393ff100fa93ed6a27 # 3.5.0
 
       - name: Cache Docker layers
         uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # 4.0.2
