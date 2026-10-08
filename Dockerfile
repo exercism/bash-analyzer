@@ -1,4 +1,4 @@
-FROM ubuntu:26.04@sha256:f3d28607ddd78734bb7f71f117f3c6706c666b8b76cbff7c9ff6e5718d46ff64
+FROM ubuntu:26.04@sha256:f144425ff09be612d6d9ad965196e9cdc23dae1f42110a8a11a3e9a8198759f7
 
 # Bats 1.13.0
 # GNU bash, version 5.3.9(1)-release (x86_64-pc-linux-gnu)
