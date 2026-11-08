@@ -9,8 +9,8 @@ set -e
 
 # Arguments:
 # $1: exercise slug
-# $2: **RELATIVE** path to solution folder (with trailing slash)
-# $3: **RELATIVE** path to output directory (with trailing slash)
+# $2: path to solution folder (with trailing slash)
+# $3: path to output directory (with trailing slash)
 
 # Output:
 # Writes the analyasis results to a analyasis.json file in the passed-in output directory.
@@ -39,7 +39,8 @@ docker build --rm --no-cache -t bash-analyzer .
 docker run \
     --network none \
     --read-only \
-    --mount type=bind,src="${PWD}/${input_dir}",dst=/solution \
-    --mount type=bind,src="${PWD}/${output_dir}",dst=/output \
-    --mount type=tmpfs,dst=/tmp \
+    --rm \
+    --mount type=bind,src="${input_dir}",dst=/solution \
+    --mount type=bind,src="${output_dir}",dst=/output \
+    --mount type=volume,dst=/tmp \
     exercism/bash-analyzer "${slug}" /solution/ /output/
