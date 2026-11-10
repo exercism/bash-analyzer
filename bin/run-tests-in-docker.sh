@@ -21,7 +21,7 @@ docker run \
     --network none \
     --read-only \
     --mount type=bind,src="${PWD}/tests",dst=/opt/analyzer/tests \
-    --mount type=tmpfs,dst=/tmp \
+    --mount type=volume,dst=/tmp \
     --workdir /opt/analyzer \
     --entrypoint /opt/analyzer/bin/run-tests.sh \
     exercism/bash-analyzer
